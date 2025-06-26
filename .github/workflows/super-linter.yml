@@ -1,24 +1,21 @@
-name: Lint Java File
+name: Manual Java Lint
 
 on:
-  push:
-    paths:
-      - 'Calculator.java'
-  workflow_dispatch:  # Allow manual trigger
+  workflow_dispatch:  # Manual trigger via GitHub UI
 
 jobs:
-  lint:
-    name: Super-Linter Java Scan
+  lint-java:
+    name: Run Super-Linter on Calculator.java
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Super-Linter on Calculator.java
+      - name: Super-Linter - Scan Calculator.java
         uses: github/super-linter@v6
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_JAVA: true
-          FILTER_REGEX_INCLUDE: 'Calculator\.java'
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          FILTER_REGEX_INCLUDE: '^Calculator\.java$'
