@@ -1,33 +1,24 @@
----
-name: Lint
+name: Lint Java File
 
-on: # yamllint disable-line rule:truthy
-  push: null
-  pull_request: null
-
-permissions: {}
+on:
+  push:
+    paths:
+      - 'Calculator.java'
+  workflow_dispatch:  # Allow manual trigger
 
 jobs:
-  build:
-    name: Lint
+  lint:
+    name: Super-Linter Java Scan
     runs-on: ubuntu-latest
 
-    permissions:
-      contents: read
-      packages: read
-      # To report GitHub Actions status checks
-      statuses: write
-
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          # super-linter needs the full git history to get the
-          # list of files that changed across commits
-          fetch-depth: 0
 
-      - name: Super-linter
-        uses: super-linter/super-linter@v7.4.0 # x-release-please-version
+      - name: Run Super-Linter on Calculator.java
+        uses: github/super-linter@v6
         env:
-          # To report GitHub Actions status checks
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_JAVA: true
+          FILTER_REGEX_INCLUDE: 'Calculator\.java'
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
